@@ -1,47 +1,79 @@
 #include <stdio.h>
+#include <string.h>
+
 #define mu_assert(message, test) do { if (!(test)) return message; } while (0)
-#define mu_run_test(test) do { char *message = test(); tests_run++; if (message) return message; } while (0)
+#define mu_run_test(test) do { const char *message = test(); tests_run++; if (message) return message; } while (0)
 
 int tests_run=0;
 
-int carre(int a)
+const char* categorize_age(int age)
 {
- return a * a;
+ if (age < 0) {
+ return "Invalid age";
+ }
+ else if (age < 13) {
+ return "Child";
+ }
+ else if (age < 20) {
+ return "Teenager";
+ }
+ else if (age < 65) {
+ return "Adult";
+ }
+ else {
+ return "Senior";
+ }
 }
 
-static char* test_carre()
+static const char* age_inferieur_a_0()
 {
-    int c=carre(3);
-    mu_assert("Le carre de 3 est 9\n",c==3*3);
+    const char* a= categorize_age(-2);
+    mu_assert("l'age n'est pas valide\n",a=="Invalid age");
     return 0;
 }
 
-static char* test_carre_negatif()
+static const char* age_inferieur_a_13()
 {
-    int c=carre(-5);
-    mu_assert("Le carre de -5 est 25\n",c==24);
+    const char* a= categorize_age(8);
+    mu_assert("l'age n'est pas valide\n",a=="Child");
     return 0;
 }
 
-static char* test_carre_0()
+static const char* age_inferieur_a_20()
 {
-    int c = carre(0);
-    mu_assert("Le carre de 0 est 0\n",c==0);
+    const char* a= categorize_age(17);
+    mu_assert("l'age n'est pas valide\n",a=="Teenager");
     return 0;
-
 }
 
-static char* all_tests(){
-    mu_run_test(test_carre);
-    mu_run_test(test_carre_negatif);
-    mu_run_test(test_carre_0);
+static const char* age_inferieur_a_65()
+{
+    const char* a= categorize_age(53);
+    mu_assert("l'age n'est pas valide\n",a=="Adult");
+    return 0;
+}
+
+static const char* age_superieur_a_65()
+{
+    const char* a= categorize_age(95);
+    mu_assert("l'age n'est pas valide\n",a=="Age invalide");
+    return 0;
+}
+
+
+static const char* all_tests(){
+    mu_run_test(age_inferieur_a_0);
+    mu_run_test(age_inferieur_a_13);
+    mu_run_test(age_inferieur_a_20);
+    mu_run_test(age_inferieur_a_65);
+    mu_run_test(age_superieur_a_65);
 
     return 0;
 }
 
 int main()
 {
- char *result = all_tests(); // on lance tous les tests
+ const char *result = all_tests(); // on lance tous les tests
  if (result != 0) // il y a eu une erreur
  {
     printf("%s\n", result); // on affiche le message d’erreur
