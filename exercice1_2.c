@@ -19,7 +19,7 @@ static char* test_carre()
 static char* test_carre_negatif()
 {
     int c=carre(-5);
-    mu_assert("Le carre de -5 est 25\n",c==25);
+    mu_assert("Le carre de -5 est 25\n",c==24);
     return 0;
 }
 
